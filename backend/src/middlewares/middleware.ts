@@ -56,3 +56,11 @@ export const validateOrderRequest=async (c:Context, next:Next)=>{
 
 
 }
+
+export const ErrorHandler=async (c:Context , next:Next)=>{
+    const start= Date.now();
+    await next();
+    const end = Date.now();
+    //@ts-ignore
+    console.log(`${c.req.method} ${c.req.url} ${end-start}ms`);
+}
