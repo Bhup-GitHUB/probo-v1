@@ -1,20 +1,15 @@
 import { Hono } from 'hono';
-import { logger } from 'hono/logger';
 import { routes } from './routes';
-import { ErrorHandler } from './middlewares/middleware';
-
+import { ErrorHandler, PerformanceLogger } from './middlewares/middleware';
 
 const app = new Hono();
 
-
-app.use('*', logger);
-
+// Add performance logging middleware
+app.use('*', PerformanceLogger);
 
 app.route('/', routes);
 
-
 app.onError(ErrorHandler);
-
 
 app.notFound((c) => {
   return c.json({
@@ -23,17 +18,5 @@ app.notFound((c) => {
   }, 404);
 });
 
-const port =  3000;
-
-//@ts-ignore
-
-console.log(`🚀 Trading server starting on port ${port}`);
-//@ts-ignore
-serve({
-  fetch: app.fetch,
-  port,
-}, (info) => {
-  console.log(` Trading server is running on http://localhost:${info.port}`);
-});
 
 export default app;
